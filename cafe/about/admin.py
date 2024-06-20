@@ -9,41 +9,41 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Provider)
-class ProviderAdmin(admin.ModelAdmin):
+@admin.register(Supplier)
+class SupplierAdmin(admin.ModelAdmin):
+    list_filter = ('is_exists',)
+
+@admin.register(Supply)
+class SupplyAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Supplies)
-class SuppliesAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(PositionSupplies)
-class Position_suppliesAdmin(admin.ModelAdmin):
+@admin.register(PosSupply)
+class PosSupplyAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(PositionOrder)
-class Position_orderAdmin(admin.ModelAdmin):
+@admin.register(PosOrder)
+class PosOrderAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Сharacteristic)
-class СharacteristicAdmin(admin.ModelAdmin):
+@admin.register(Parametr)
+class ParametrAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(FullCharacteristic)
-class FullCharacteristicAdmin(admin.ModelAdmin):
+@admin.register(PosParametr)
+class PosParametrAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'price', 'exists')
+    list_display = ('pk', 'name', 'price', 'is_exists')
     list_display_links = ('name',)
-    list_editable = ('price', 'exists')
+    list_editable = ('price', 'is_exists')
     search_fields = ('name', 'price')
-    list_filter = ('exists',)
+    list_filter = ('is_exists',)
     
 @admin.register(WareHouse)
 class WareHouseAdmin(admin.ModelAdmin):

@@ -3,32 +3,54 @@ from django.db import models
 
 MAX_LENGTH = 255
 
-class Product(models.Model):
-    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
-    description = models.TextField(null=True, blank=True, verbose_name='Описание')
-    price = models.FloatField(verbose_name='Цена')
-    create_data = models.DateField(auto_now_add=True, verbose_name='Дата создания')
-    update_data = models.DateField(auto_now=True, verbose_name='Дата изменения')
-    photo = models.ImageField(upload_to='images/%Y/%m/%d', null=True, blank=True, verbose_name='Фотография блюда')
-    exists = models.BooleanField(default=True, verbose_name='Добавить в меню или нет?')
-    warehouse = models.ManyToManyField('WareHouse', through='Inventory', verbose_name='Склад')
+class Supplier(models.Model):
+    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название компании')
+    agent_lastname = models.CharField(max_length=MAX_LENGTH, verbose_name='Фамилия представителя')
+    agent_name = models.CharField(max_length=MAX_LENGTH, verbose_name='Имя представителя')
+    agent_surname = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Отчество представителя')
+    phone = models.CharField(max_length=16, verbose_name='Телефон представителя')
+    location = models.CharField(max_length=MAX_LENGTH, verbose_name='Адрес')
+    is_exists = models.BooleanField(default=False, verbose_name='Логическое удаление')
     
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
     
     class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
-        ordering = ['name', '-price']
+        verbose_name = 'Поставщик'
+        verbose_name_plural = 'Поставщики'
         
 
-class Category(models.Model):
-    title = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
-    description = models.TextField(null=True, blank=True, verbose_name='Описание')
-    product = models.ManyToManyField(Product)
+class Supply(models.Model):
+    date_supply = models.DateTimeField(auto_now_add=True, verbose_name='Дата поставки')
+    supplier = models.OneToOneField(Supplier, on_delete=models.CASCADE, verbose_name='Поставщик')
     
-    def __str__(self) -> str:
-        return self.title
+    product = models.ManyToManyField('Product', through='PosSupply', verbose_name='Товары')
+    
+    def __str__(self):
+        return f'{self.date_supply} | {self.supplier.name}'
+    
+    class Meta:
+        verbose_name = 'Поставка'
+        verbose_name_plural = 'Поставки'
+        
+
+class Parametr(models.Model):
+    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Характеристика')
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Характеристика'
+        verbose_name_plural = 'Характеристики'
+    
+
+class Category(models.Model):
+    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
+    description = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Описание')
+    
+    def __str__(self):
+        return f'{self.name}'
     
     class Meta:
         verbose_name = 'Категория'
@@ -36,117 +58,106 @@ class Category(models.Model):
         
 
 class Tag(models.Model):
-    title = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
-    desctiption = models.TextField(null=True, blank=True, verbose_name='Описание')
-    product = models.ManyToManyField(Product)
+    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
+    description = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Описание')
     
-    def __str__(self) -> str:
-        return self.title
+    def __str__(self):
+        return f'{self.name}'
     
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
-    
-
-class Provider(models.Model):
-    name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название компании')
-    name_provider = models.CharField(max_length=MAX_LENGTH, verbose_name='Имя представителя')
-    lastname_provider = models.CharField(max_length=MAX_LENGTH, verbose_name='Фамилия представителя')
-    surname_provider = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Очество представителя')
-    phone = models.CharField(max_length=20, verbose_name='Телефон представителя')
-    adress = models.TextField(verbose_name='Адрес')
-
-    def __str__(self) -> str:
-        return self.name + '(' + self.name_provider + ' ' + self.lastname_provider + ')' + ' | ' + self.phone
-
-    class Meta:
-        verbose_name = 'Поставщик'
-        verbose_name_plural = 'Поставщики'
-        
-        
-class Supplies(models.Model):
-    number = models.IntegerField(verbose_name='Номер поставки')
-    date_supplies = models.DateField(auto_now_add=True, verbose_name='Дата поставки')
-    provider = models.OneToOneField(Provider, on_delete=models.PROTECT, verbose_name='Поставщик')
-        
-    def __str__(self) -> str:
-        return str(self.number) + ' | ' + self.provider.__str__()
-    
-    class Meta:
-        verbose_name = 'Поставка'
-        verbose_name_plural = 'Поставки'
-        
-
-class PositionSupplies(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.PROTECT, verbose_name='Товар')
-    supplies = models.OneToOneField(Supplies, on_delete=models.PROTECT, verbose_name='Поставка')
-    count = models.IntegerField(verbose_name='Кол-во товара')
-    
-    def __str__(self) -> str:
-        return self.product.__str__() + ' | ' + str(self.count)
-    
-    class Meta:
-        verbose_name = 'Позиция поставки'
-        verbose_name_plural = 'Позиция поставок'
         
 
 class Order(models.Model):
-    number = models.IntegerField(verbose_name='Номер заказа')
-    name_customer = models.CharField(max_length=MAX_LENGTH, verbose_name='Имя покупателя')
-    lastname_customer = models.CharField(max_length=MAX_LENGTH, verbose_name='Фамилия покупателя')
-    surname_customer = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Очество покупателя')
-    comment = models.TextField(null=True, blank=True, verbose_name='Комментаций')
-    adress = models.TextField(verbose_name='Адрес доставки')
-    method_delivery = models.TextField(verbose_name='Способ доставки')
-    create_data = models.DateField(auto_now_add=True, null=True, blank=True, verbose_name='Дата создания')
-    end_data = models.DateField(auto_now=True, null=True, blank=True, verbose_name='Дата завершения')
+    PICKUP = 'PK'
+    COURIER = 'CR'
+    DELIVERY_CHOICES = [
+        (PICKUP, 'Самовывоз'),
+        (COURIER, 'Курьер'),
+    ]
     
-    def __str__(self) -> str:
-        return self.name_customer + ' ' + self.lastname_customer + ' | ' + self.comment
+    count = models.PositiveIntegerField(verbose_name='Номер заказа')
+    customer_lastname = models.CharField(max_length=MAX_LENGTH, verbose_name='Фамилия заказчика')
+    customer_name = models.CharField(max_length=MAX_LENGTH, verbose_name='Имя заказчика')
+    customer_surname = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Отчество заказчика')
+    comment = models.TextField(blank=True, null=True, verbose_name='Комментарий')
+    location = models.CharField(max_length=MAX_LENGTH, blank=True, null=True, verbose_name='Адрес доставки')
+    delivery = models.CharField(max_length=2, choices=DELIVERY_CHOICES, verbose_name='Способ доставки')
+    create_data = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    completion_data = models.DateTimeField(null=True, blank=True, verbose_name='Дата завершения')
+    
+    product = models.ManyToManyField('Product', through='PosOrder', verbose_name='Товар')
+    
+    def __str__(self):
+        return f'{self.count} | {self.location}'
     
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
         
 
-class PositionOrder(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.PROTECT, verbose_name='Заказ')
-    product = models.OneToOneField(Product, on_delete=models.PROTECT, verbose_name='Товар')
-    count = models.IntegerField(verbose_name='Количество')
-    discount = models.IntegerField(null=True, blank=True, verbose_name='Скидка')
+class Product(models.Model):
+    name = models.CharField(max_length=MAX_LENGTH, unique=True, verbose_name='Название')
+    desctipriont = models.CharField(max_length=MAX_LENGTH, null=True, blank=True, verbose_name='Описание')
+    price = models.FloatField(verbose_name='Цена')
+    create_data = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    update_data = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+    photo = models.ImageField(upload_to='images/%Y/%m/%d', default='images/no_photo.png', verbose_name='Картинка')
+    is_exists = models.BooleanField(default=False, verbose_name='Логическое удаление')
     
-    def __str__(self) -> str:
-        return self.product.__str__() + ' | ' + str(self.count)
+    parament = models.ManyToManyField(Parametr, through='PosParametr', verbose_name='Характеристика')
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категории')
+    tag = models.ManyToManyField(Tag, blank=True, verbose_name='Теги')
     
-    class Meta:
-        verbose_name = 'Позиция заказа'
-        verbose_name_plural = 'Позиции заказа'
-        
-        
-class Сharacteristic(models.Model):
-    title = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
-    characteristic = models.TextField(verbose_name='Характеристика')
-    
-    def __str__(self) -> str:
-        return self.title
+    def __str__(self):
+        return self.name
     
     class Meta:
-        verbose_name = 'Характеристика'
-        verbose_name_plural = 'Характеристики'
-        
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+        ordering = ['name', '-price']
 
-class FullCharacteristic(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.PROTECT, verbose_name='Товар')
-    characteristic = models.OneToOneField(Сharacteristic, on_delete=models.PROTECT, null=True, verbose_name='Характеристика товара')
-    meaning = models.CharField(max_length=MAX_LENGTH, verbose_name='Значение')
+
+class PosParametr(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name='Товар')
+    parametr = models.ForeignKey(Parametr, on_delete=models.PROTECT, verbose_name='Характеристика')
+    value = models.CharField(max_length=MAX_LENGTH, verbose_name='Значение')
     
-    def __str__(self) -> str:
-        return f'Характеристика | {self.meaning}'
+    def __str__(self):
+        return f'{self.product.name} | {self.value}'
     
     class Meta:
         verbose_name = 'Характеристика товара'
-        verbose_name = 'Характеристи товаров'
+        verbose_name_plural = 'Характеристики товаров'
         
+
+class PosOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT, verbose_name='Заказ')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name='Товар')
+    count = models.PositiveIntegerField(verbose_name='Количество')
+    discount = models.PositiveIntegerField(verbose_name='Скидка')
+    
+    def __str__(self):
+        return f'{self.order.count} | {self.product.name} ({self.count})'
+    
+    class Meta:
+        verbose_name = 'Позиция заказа'
+        verbose_name_plural = 'Позиции заказов'
+        
+
+class PosSupply(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name='Товар')
+    supply = models.ForeignKey(Supply, on_delete=models.PROTECT, verbose_name='Поставка')
+    count = models.PositiveIntegerField(verbose_name='Кол-во товара')
+    
+    def __str__(self):
+        return f'{self.supply.date_supply} | {self.product.name} ({self.count})'
+    
+    class Meta:
+        verbose_name = 'Позиция поставки'
+        verbose_name_plural = 'Позиции поставок'
+    
         
 class WareHouse(models.Model):
     ALL = 'AL'
