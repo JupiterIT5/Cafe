@@ -1,0 +1,92 @@
+:root {
+    --width: 91.7%
+}
+
+.section__catalog {
+    padding: 19px 29px;
+    width: calc(var(--width) - 58px);
+    height: auto;
+    background-color: #fff;
+    border-radius: 20px;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+.section__catalog .title {
+    font-size: 32px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.section__catalog .catalog__list {
+    display: grid;
+    grid-template-columns: 400px 400px;
+    row-gap: 30px;
+    column-gap: 100px;
+    width: 900px;
+    margin: 0 auto;
+}
+
+.section__catalog .catalog__list .dish {
+    width: 400px;
+    height: 500px;
+    border: 1px solid #a8a6a6;
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+}
+
+.section__catalog .catalog__list .dish img {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border-radius: 50%;
+}
+
+.section__catalog .catalog__list .dish h2 {
+    text-align: start;
+    padding-left: 20px;
+    font-size: 24px;
+    font-family: Poppins, sans-serif;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 28px;
+}
+
+.section__catalog .catalog__list .dish .price {
+    position: absolute;
+    right: 50px;
+    top: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: #7ca4ee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    color: #fff;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.section__catalog .catalog__list .dish h3 {
+    text-align: start;
+    padding-left: 20px;
+    font-family: Poppins;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.section__catalog .catalog__list .dish a {
+    color: #1b9edb;
+    text-decoration: underline;
+    font-family: Poppins;
+    font-weight: 300;
+    font-size: 18px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}

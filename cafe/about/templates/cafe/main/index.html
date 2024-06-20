@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Меню кафе</title>
+</head>
+<body>
+    <header class="header">
+        <ul class='nav__list'>
+            <li class="nav"><a href="{% url "catalog_dish_page" %}">Товары</a></li>
+            <li class="nav"><a href="{% url "all_provider_list" %}">Поставщики</a></li>
+            <li class="nav"><a href="{% url "add_new_provider" %}">Добавить поставщика</a></li>
+        </ul>
+    </header>
+    <div class="section__catalog">
+        <div class="title">Товары</div>
+        <div class="catalog__list">
+            {% for dish in dish_list %}
+                <div class="dish">
+                    {% if dish.photo %}
+                        <img src="{{ dish.photo.url }}" alt="dish">
+                    {% else %}
+                        <img src="{% static "image/no_photo.png" %}" alt="dish">
+                    {% endif %}
+                    <h2>{{ dish.name }}</h2>
+                    <p class='price'>{{ dish.price }} ₽</p>
+                    <h3>
+                        Категории - 
+                        {% for category in dish.category_set.all %}
+                            {{ category.title }}
+                        {% endfor %}
+                    </h3>
+                    <h3>
+                        Тег - 
+                        {% for tag in dish.tag_set.all %}
+                            {{ tag.title }}
+                        {% endfor %}
+                    </h3>
+                    <a href="{% url "menu_dish" dish.pk%}">Подробнее...</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

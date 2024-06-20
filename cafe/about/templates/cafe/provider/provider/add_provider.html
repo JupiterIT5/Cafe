@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "css/add_provider.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Добавить поставщика</title>
+</head>
+<body>
+    <header class="header">
+        <ul class='nav__list'>
+            <li class="nav"><a href="{% url "catalog_dish_page" %}">Товары</a></li>
+            <li class="nav"><a href="{% url "all_provider_list" %}">Поставщики</a></li>
+            <li class="nav"><a href="{% url "add_new_provider" %}">Добавить поставщика</a></li>
+        </ul>
+    </header>
+    <div class="add_provider">
+        <div class="title">Добавить поставщика</div>
+        <form method="post" class='form-control'>
+            {% csrf_token %}
+            {{ form.name }}
+            {{ form.name_provider }}
+            {{ form.lastname_provider }}
+            {{ form.surname_provider }}
+            {{ form.phone }}
+            {{ form.adress }}
+            <button type="submit" class='submit'>Создать</button>
+        </form>
+    </div>
+    {% if error %}
+        <div class="error">
+            Данные введены не верно!
+        </div>
+    {% endif %}
+</body>
+</html>
