@@ -1,4 +1,4 @@
-.add_provider {
+.add_supplier {
     width: 500px;
     height: auto;
     padding: 19px 29px;
@@ -7,7 +7,7 @@
     margin: 0 auto;
 }
 
-.add_provider .title {
+.add_supplier .title {
     font-family: Poppins, sans-serif;
     font-size: 32px;
     font-weight: 700;
@@ -15,13 +15,13 @@
     text-align: center;
 }
 
-.add_provider form {
+.add_supplier form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.add_provider form input {
+.add_supplier form input {
     width: 100%;
     height: 56px;
     border: 2px solid #1fc1e9;
@@ -34,14 +34,14 @@
     outline: none;
 }
 
-.add_provider form input::placeholder {
+.add_supplier form input::placeholder {
     color: #1fc1e9;
     font-size: 18px;
     font-weight: 300;
     font-family: Poppins, sans-serif;
 }
 
-.add_provider form .submit {
+.add_supplier form .submit {
     width: 100%;
     height: 56px;
     margin-top: 50px;

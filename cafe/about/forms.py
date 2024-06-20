@@ -4,21 +4,22 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 import re
 
+MAX_LENGTH = 255
 
-class ProviderForm(forms.Form):
-    name = forms.CharField(min_length=10, max_length=255, label='Название компании')
-    name_provider = forms.CharField(min_length=2, max_length=50, label='Имя')
-    lastname_provider = forms.CharField(min_length=2, max_length=50, label='Фамилия')
-    surname_provider = forms.CharField(min_length=2, max_length=50, label='Очество')
-    phone = forms.CharField(max_length=20, label='Телефон')
-    adress = forms.CharField(min_length=10, label='Адрес')
+class SupplierForm(forms.Form):
+    name = forms.CharField(max_length=MAX_LENGTH, label='Название компании')
+    agent_lastname = forms.CharField(max_length=MAX_LENGTH, label='Фамилия представителя')
+    agent_name = forms.CharField(max_length=MAX_LENGTH, label='Имя представителя')
+    agent_surname = forms.CharField(max_length=MAX_LENGTH, label='Отчество представителя')
+    phone = forms.CharField(max_length=16, label='Телефон представителя')
+    location = forms.CharField(max_length=MAX_LENGTH, label='Адрес')
     
     name.widget.attrs.update({'class': 'form-control', 'placeholder': 'Название компании'})
-    name_provider.widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя'})
-    lastname_provider.widget.attrs.update({'class': 'form-control', 'placeholder': 'Фамилия'})
-    surname_provider.widget.attrs.update({'class': 'form-control', 'placeholder': 'Очество'})
+    agent_lastname.widget.attrs.update({'class': 'form-control', 'placeholder': 'Фамилия'})
+    agent_name.widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя'})
+    agent_surname.widget.attrs.update({'class': 'form-control', 'placeholder': 'Отчество'})
     phone.widget.attrs.update({'class': 'form-control', 'placeholder': 'Телефон'})
-    adress.widget.attrs.update({'class': 'form-control', 'placeholder': 'Адрес'})
+    location.widget.attrs.update({'class': 'form-control', 'placeholder': 'Адрес'})
     
     def clean_telephone(self):
         phone = self.cleaned_data['phone']

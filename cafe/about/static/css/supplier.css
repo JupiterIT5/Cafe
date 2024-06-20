@@ -2,7 +2,7 @@
     --width: 91.7%
 }
 
-.section__provider {
+.section__supplier {
     width: calc(var(--width) - 58px);
     padding: 19px 29px;
     background-color: #fff;
@@ -10,7 +10,7 @@
     margin: 0 auto;
 }
 
-.section__provider .title {
+.section__supplier .title {
     font-family: Poppins, sans-serif;
     font-size: 32px;
     font-weight: 700;
@@ -18,7 +18,7 @@
 }
 
 
-.section__provider .provider__container .provider {
+.section__supplier .supplier__container .supplier {
     width: 400px;
     height: 400px;
     border: 1px solid #a09f9f;
@@ -28,7 +28,7 @@
     flex-direction: column;
 }
 
-.section__provider .provider__container .provider h2 {
+.section__supplier .supplier__container .supplier h2 {
     font-size: 24px;
     font-family: Poppins;
     font-weight: 300;
@@ -37,7 +37,7 @@
     line-height: 28px;
 }
 
-.section__provider .provider__container .provider p {
+.section__supplier .supplier__container .supplier p {
     border-bottom: 1px solid #000;
     font-size: 18px;
     font-family: Poppins;

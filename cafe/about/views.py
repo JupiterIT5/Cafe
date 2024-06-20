@@ -6,10 +6,7 @@ from .forms import *
 
 
 def catalog_list(request):
-    model = Product.objects.filter(exists = True)
-    print('Anonymous: ', request.user.is_anonymous )
-    print('Staff: ', request.user.is_staff)
-    print('Superuser: ', request.user.is_superuser)
+    model = Product.objects.filter(is_exists = False)
     context = {
         'dish_list': model
     }
@@ -24,36 +21,36 @@ def dish(request, id):
     return render(request, 'cafe/dish/dish.html', context)
 
 
-def all_provider(request):
-    model = Provider.objects.all()
+def all_supplier(request):
+    model = Supplier.objects.all()
     context = {
-        'all_provider': model
+        'all_supplier': model
     }
-    return render(request, 'cafe/provider/main/all.html', context)
+    return render(request, 'cafe/supplier/main/all.html', context)
 
 
-def provider(request, id):
-    model = get_object_or_404(Provider, pk=id)
+def supplier(request, id):
+    model = get_object_or_404(Supplier, pk=id)
     context = {
-        'provider': model
+        'supplier': model
     }
-    return render(request, 'cafe/provider/provider/provider.html', context)
+    return render(request, 'cafe/supplier/supplier/supplier.html', context)
 
 
-def add_provider(request):
+def add_supplier(request):
     if request.method == 'POST':
-        form_add_provider = ProviderForm(request.POST)
-        if form_add_provider.is_valid() and form_add_provider.clean_telephone():
-            new_provider = Provider(**form_add_provider.cleaned_data)
-            new_provider.save()
-            return redirect('all_provider_list')
-        return render(request, 'cafe/provider/provider/add_provider.html', {'form': ProviderForm, 'error': 'error code'})
+        form_add_supplier = SupplierForm(request.POST)
+        if form_add_supplier.is_valid() and form_add_supplier.clean_telephone():
+            new_supplier = Supplier(**form_add_supplier.cleaned_data)
+            new_supplier.save()
+            return redirect('all_supplier_list')
+        return render(request, 'cafe/supplier/supplier/add_supplier.html', {'form': SupplierForm, 'error': 'error code'})
     else:
-        form = ProviderForm
+        form = SupplierForm
         context = {
             'form': form
         }
-        return render(request, 'cafe/provider/provider/add_provider.html', context)
+        return render(request, 'cafe/supplier/supplier/add_supplier.html', context)
     
 
 

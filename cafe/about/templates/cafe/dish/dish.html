@@ -16,8 +16,8 @@
     <header class="header">
         <ul class='nav__list'>
             <li class="nav"><a href="{% url "catalog_dish_page" %}">Товары</a></li>
-            <li class="nav"><a href="{% url "all_provider_list" %}">Поставщики</a></li>
-            <li class="nav"><a href="{% url "add_new_provider" %}">Добавить поставщика</a></li>
+            <li class="nav"><a href="{% url "all_supplier_list" %}">Поставщики</a></li>
+            <li class="nav"><a href="{% url "add_new_supplier" %}">Добавить поставщика</a></li>
         </ul>
     </header>
     <div class="section__dish">
@@ -30,21 +30,26 @@
             <h2>{{ dish.name }}</h2>
             <p>{{ dish.description }}</p>
             <h3>{{ dish.price }} ₽</h3> 
-            <h3 style="margin-bottom: 10px">Категории:<br/></h3>
-            {% for category in dish.category_set.all %}
-                <h4>{{ category.title }} - {{ category.description }}</h4>
-            {% endfor %}
+            <h3 style="margin-bottom: 10px">Категория: {{ dish.category.name }} - {{ dish.category.description }}</h3>
             <h3 style="margin-bottom: 10px; margin-top: 30px">Теги: <br/></h3>
-            {% for tag in dish.tag_set.all %}
-                <h4>{{ tag.title }} - {{ tag.desctiption }}</h4>
+            {% for tag in dish.tag.all %}
+                <h4>{{ tag }} - {% if tag.desctiption %}{{ tag.desctiption }}{% else %}Отсутствует{% endif %}</h4>
             {% endfor %}
         </div>
     </div>
     <div class="about">
         <div class="title">Характеристика</div>
-        <p>{{ dish.fullcharacteristic.characteristic.characteristic }}</p>
+        <p>
+            {%  for parameter in dish.posparametr_set.all %}
+                {{ parameter.parametr.name }}
+            {% endfor %}
+        </p>
         <div class="title">Значение</div>
-        <p>{{ dish.fullcharacteristic.meaning }}</p>
+        <p>
+            {%  for parameter in dish.posparametr_set.all %}
+                {{ parameter.value }}
+            {% endfor %}
+        </p>
     </div>
 </body>
 </html>

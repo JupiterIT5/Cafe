@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static "css/add_provider.css" %}">
+    <link rel="stylesheet" href="{% static "css/add_supplier.css" %}">
     <link rel="stylesheet" href="{% static "css/header.css" %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,20 +16,20 @@
     <header class="header">
         <ul class='nav__list'>
             <li class="nav"><a href="{% url "catalog_dish_page" %}">Товары</a></li>
-            <li class="nav"><a href="{% url "all_provider_list" %}">Поставщики</a></li>
-            <li class="nav"><a href="{% url "add_new_provider" %}">Добавить поставщика</a></li>
+            <li class="nav"><a href="{% url "all_supplier_list" %}">Поставщики</a></li>
+            <li class="nav"><a href="{% url "add_new_supplier" %}">Добавить поставщика</a></li>
         </ul>
     </header>
-    <div class="add_provider">
+    <div class="add_supplier">
         <div class="title">Добавить поставщика</div>
         <form method="post" class='form-control'>
             {% csrf_token %}
             {{ form.name }}
-            {{ form.name_provider }}
-            {{ form.lastname_provider }}
-            {{ form.surname_provider }}
+            {{ form.agent_lastname }}
+            {{ form.agent_name }}
+            {{ form.agent_surname }}
             {{ form.phone }}
-            {{ form.adress }}
+            {{ form.location }}
             <button type="submit" class='submit'>Создать</button>
         </form>
     </div>
